@@ -21,6 +21,7 @@ public class Producer {
     }
 
     public void send(String topic, String value) {
+        logger.info("Sending message to topic {}, value : {}", topic, value);
         String key = UUID.randomUUID().toString();
         CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, UUID.randomUUID().toString(), value);
         future.whenComplete((result, e) -> {
