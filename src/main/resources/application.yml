@@ -1,6 +1,6 @@
 spring:
   application:
-    name: kafka-spring-boot
+    name: kafka-spring-boot-2
   kafka:
     bootstrap-servers: pkc-n98pk.us-west-2.aws.confluent.cloud:9092
     producer:
