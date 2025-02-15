@@ -10,11 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
-public class SimpleProducer {
+public class SimpleProducerSync {
 
-    private static final Logger logger = LoggerFactory.getLogger(SimpleProducer.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleProducerSync.class);
 
     public static void main(String[] args) {
 
@@ -30,16 +29,16 @@ public class SimpleProducer {
 
         // 비동기(Async) 기반으로 메세지 전송
         // send message
-        Future<RecordMetadata> send = producer.send(record);
         try {
-            RecordMetadata recordMetadata = send.get();
-            logger.info("record Meta data : {}", recordMetadata.toString());
+            RecordMetadata recordMetadata = producer.send(record).get();
+            logger.info("\n =================== record Meta data : {}", recordMetadata.toString());
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+        } finally {
+            producer.close();
         }
-
 
         producer.flush();
         producer.close();
