@@ -1,6 +1,7 @@
 package com.example.producers;
 
 
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -25,19 +26,8 @@ public class SimpleProducerAsyncWithKey {
 
         for (int i = 0; i < 10; i++) {
             ProducerRecord<String, String> record = new ProducerRecord<>(topic, String.valueOf(i), "hello-word" + i);
-
-            // 비동기(Async) 기반으로 메세지 전송
-            // send message
-//        19:01:36.014 [kafka-producer-network-thread | producer-1] INFO com.example.producers.SimpleProducerAsync -- kafka-producer-network-thread | producer-1
-            producer.send(record, (metadata, e) -> {
-                logger.info(Thread.currentThread().getName());
-                if (e == null) {
-                    logger.info("{} timestamp : {}", metadata.toString(), metadata.offset());
-                } else {
-                    logger.error("error ", e);
-                }
-
-            });
+            Callback customCallback = new CustomCallback(i);
+            producer.send(record, customCallback);
         }
 
 //    });
